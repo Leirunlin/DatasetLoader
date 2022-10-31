@@ -9,7 +9,8 @@ parser.add_argument("--dataset", type=str, default='cora')
 args = parser.parse_args()
 
 name = args.dataset
-name = name.
+name = name.lower()
+
 ### 
 if name in ['cora', 'citeseer', 'pubmed']:
     dataset = Planetoid(root=root, name=name)
