@@ -6,7 +6,6 @@ import csv
 import json
 import torch
 import torch.nn.functional as F
-import argparse
 from torch_geometric.datasets import Planetoid, WebKB, WikipediaNetwork, Amazon, Actor
 from torch_geometric.data import Data, InMemoryDataset, download_url
 import scipy
