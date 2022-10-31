@@ -13,13 +13,6 @@ import scipy
 from scipy.io import loadmat
 from typing import Callable, List, Optional
 
-
-root = "/data/runlin_lei/data"
-parser = argparse.ArgumentParser()
-parser.add_argument("--dataset", type=str, default='cora')
-args = parser.parse_args()
-
-
 def even_quantile_labels(vals, nclasses, verbose=True):
     label = -1 * np.ones(vals.shape[0], dtype=np.int64)
     interval_lst = []
