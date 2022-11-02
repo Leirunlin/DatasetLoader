@@ -28,9 +28,13 @@ FullStructure
 |  |-- citeseer (*) 
 |  |-- Computers (*)
 |  |-- cornell (*)
+|  |-- deezer-europe 
+|  |  |-- raw
+|  |  |  |-- deezer-europe.mat 
+|  |  |  |-- deezer-europe-splits.npy (fixed splits)
 |  |-- genius
 |  |  |-- raw
-|  |  |  |-- data.mat (genius.mat, requires rename)
+|  |  |  |-- genius.mat 
 |  |  |  |-- genius-splits.npy (fixed splits)
 |  |-- ogbn_arixv (downloaded from ogb)
 |  |  |-- arxiv-year-splits.npy
@@ -38,28 +42,28 @@ FullStructure
 |  |  |-- processed
 |  |  |-- raw
 |  |  |-- split
-|  |-- penn94
+|  |-- Penn94
 |  |  |-- raw
-|  |  |  |-- data.mat (penn94.mat, requires rename)
+|  |  |  |-- Penn94.mat 
 |  |  |  |-- fb100-Penn94-splits.npy (fixed splits)
 |  |-- Photo (*)
 |  |-- pokec
 |  |  |-- raw
-|  |  |  |-- data.mat (pokec.mat, requires rename)
+|  |  |  |-- pokec.mat
 |  |  |  |-- pokec-splits.npy (fixed splits)
 |  |-- pubmed
 |  |-- snap-patents
 |  |  |-- raw
-|  |  |  |-- data.mat (snap-patents.mat, requires rename)
+|  |  |  |-- snap-patents.mat
 |  |  |  |-- snap-patents-splits.npy (fixed splits)
 |  |-- squirrel (*)
 |  |-- texas (*)
 |  |-- twitch-de
 |  |  |-- raw
-|  |  |  |-- musae_de_edges.csv
-|  |  |  |-- musae_de_features.json
-|  |  |  |-- musae_de_target.csv
-|  |  |  |-- twitch-e-de-splits.npy
+|  |  |  |-- musae_DE_edges.csv
+|  |  |  |-- musae_DE_features.json
+|  |  |  |-- musae_DE_target.csv
+|  |  |  |-- twitch-e-DE-splits.npy
 |  |-- twitch-gamer
 |  |  |-- raw
 |  |  |  |-- twitch-gamer_edges.csv
@@ -100,5 +104,8 @@ For example, cora after processing:
 * Directly download LINKX datasets and splits could fail. Please download raw files from [LINKX](https://github.com/CUAI/Non-Homophily-Large-Scale) and store in the given format.
 * Data splits are fixed following pyG except for wiki (fixed splits are not provided). For more flexible splits, please refer to [GPRGNN](https://github.com/jianhao2016/GPRGNN) and [BernNet](https://github.com/ivam-he/BernNet).
 
-
+## Update in 11/2/2022
+* Remove the requirement of renaming .mat files.
+* Add deezer-europe datasets.
+* Remove the requirement of renaming raw files in twitch-de dataset.
 
