@@ -46,7 +46,7 @@ def load_twitch_gamer(nodes, task="dead_account"):
     return label, features
 
 
-def load_twitch(lang):
+def load_twitch(lang, root):
     filepath = root + "/twitch-de/raw"
     label = []
     node_ids = []
@@ -131,30 +131,33 @@ class LINKXDataset(InMemoryDataset):
 
     datasets = {
         'penn94': {
-            'data.mat': f'{github_url}/facebook100/Penn94.mat'
+            'Penn94.mat': f'{github_url}/facebook100/Penn94.mat'
         },
         'reed98': {
-            'data.mat': f'{github_url}/facebook100/Reed98.mat'
+            'Reed98.mat': f'{github_url}/facebook100/Reed98.mat'
         },
         'amherst41': {
-            'data.mat': f'{github_url}/facebook100/Amherst41.mat',
+            'Amherst41.mat': f'{github_url}/facebook100/Amherst41.mat',
         },
         'cornell5': {
-            'data.mat': f'{github_url}/facebook100/Cornell5.mat'
+            'Cornell5.mat': f'{github_url}/facebook100/Cornell5.mat'
         },
         'johnshopkins55': {
-            'data.mat': f'{github_url}/facebook100/Johns%20Hopkins55.mat'
+            'Johns%20Hopkins55.mat': f'{github_url}/facebook100/Johns%20Hopkins55.mat'
         },
         'genius': {
-            'data.mat': f'{github_url}/genius.mat'
+            'genius.mat': f'{github_url}/genius.mat'
         },
         'snap-patents': {
-            'data.mat': f'{github_url}/snap-patents.mat'
+            'snap-patents.mat': f'{github_url}/snap-patents.mat'
         },
         'twitch-de': {
-            'musae_de_edges.csv': f'{github_url}/twitch/de/musae_DE_edges.csv',
-            'musae_de_features.json': f'{github_url}/twitch/de/musae_DE_features.json',
-            'musae_de_target.csv': f'{github_url}/twitch/de/musae_DE_target.csv'
+            'musae_DE_edges.csv': f'{github_url}/twitch/DE/musae_DE_edges.csv',
+            'musae_DE_features.json': f'{github_url}/twitch/DE/musae_DE_features.json',
+            'musae_DE_target.csv': f'{github_url}/twitch/DE/musae_DE_target.csv'
+        },
+        'deezer-europe': {
+            'deezer-europe.mat': f'{github_url}/deezer-europe.mat'
         },
         'wiki': {
             'wiki_views2M.pt':
@@ -171,7 +174,7 @@ class LINKXDataset(InMemoryDataset):
             f'{gdrive_url}id=1XLETC6dG3lVl7kDmytEJ52hvDMVdxnZ0',
         },
         'pokec': {
-            'data.mat': f'{github_url}/pokec.mat'
+            'pokec.mat': f'{github_url}/pokec.mat'
         },
         'arxiv-year': {},
     }
@@ -182,7 +185,8 @@ class LINKXDataset(InMemoryDataset):
         'twitch-gamers': f'{github_url}/splits/twitch-gamers-splits.npy',
         'snap-patents': f'{github_url}/splits/snap-patents-splits.npy',
         'pokec': f'{github_url}/splits/pokec-splits.npy', ### bug to be fixed
-        'twitch-de': f'{github_url}/splits/twitch-e-de-splits.npy',
+        'twitch-de': f'{github_url}/splits/twitch-e-DE-splits.npy',
+        'deezer-europe': f'{github_url}/splits/deezer-europe-splits.npy',
     }
 
     def __init__(self, root: str, name: str,
@@ -259,6 +263,24 @@ class LINKXDataset(InMemoryDataset):
 
         return data
 
+    def _process_deezer_europe(self):
+        mat = loadmat(self.raw_paths[0])
+        A, label, features = mat['A'], mat['label'], mat['features']
+        edge_index = torch.from_numpy(np.array(A.nonzero())).to(torch.long)
+        x = torch.tensor(features.todense(), dtype=torch.float)
+        y = torch.tensor(label, dtype=torch.long).squeeze()
+        data = Data(x=x, edge_index=edge_index, y=y)
+        splits = np.load(self.raw_paths[1], allow_pickle=True)
+        sizes = (data.num_nodes, len(splits))
+        data.train_mask = torch.zeros(sizes, dtype=torch.bool)
+        data.val_mask = torch.zeros(sizes, dtype=torch.bool)
+        data.test_mask = torch.zeros(sizes, dtype=torch.bool)
+        for i, split in enumerate(splits):
+            data.train_mask[:, i][torch.tensor(split['train'])] = True
+            data.val_mask[:, i][torch.tensor(split['valid'])] = True
+            data.test_mask[:, i][torch.tensor(split['test'])] = True
+        return data
+
     def _process_facebook(self):
         mat = loadmat(self.raw_paths[0])
 
@@ -298,7 +320,6 @@ class LINKXDataset(InMemoryDataset):
         x = torch.from_numpy(mat['node_feat']).to(torch.float)
         y = torch.from_numpy(mat['label']).squeeze().to(torch.long)
         data = Data(x=x, edge_index=edge_index, y=y)
-        print(self.raw_paths)
         splits = np.load(self.raw_paths[1], allow_pickle=True)
         sizes = (data.num_nodes, len(splits))
         data.train_mask = torch.zeros(sizes, dtype=torch.bool)
@@ -332,15 +353,15 @@ class LINKXDataset(InMemoryDataset):
         return data
 
     def _process_twitch_de(self):
-        lang = 'de'
-        A, label, features = load_twitch(lang)
+        lang = 'DE'
+        A, label, features = load_twitch(lang, root=self.root)
         edge_index = torch.from_numpy(np.array(A.nonzero())).to(torch.long)
         node_feat = torch.tensor(features, dtype=torch.float)
         label = torch.tensor(label, dtype=torch.long)
 
         data = Data(x=node_feat, edge_index=edge_index, y=label)
         paths = {x.split('/')[-1]: x for x in self.raw_paths}
-        splits = np.load(paths['twitch-e-de-splits.npy'], allow_pickle=True)
+        splits = np.load(paths['twitch-e-DE-splits.npy'], allow_pickle=True)
         sizes = (data.num_nodes, len(splits))
         data.train_mask = torch.zeros(sizes, dtype=torch.bool)
         data.val_mask = torch.zeros(sizes, dtype=torch.bool)
@@ -352,8 +373,8 @@ class LINKXDataset(InMemoryDataset):
         return data
 
     def _process_arxiv_year(self):
-        dataset = NodePropPredDataset(root=root, name='ogbn-arxiv')
-        split_path = root + "/ogbn_arxiv/arxiv-year-splits.npy"
+        dataset = NodePropPredDataset(root=self.root, name='ogbn-arxiv')
+        split_path = self.root + "/ogbn_arxiv/arxiv-year-splits.npy"
         edge_index = torch.as_tensor(dataset.graph['edge_index'])
         x = torch.as_tensor(dataset.graph['node_feat'])
         nclass = 5
@@ -377,7 +398,9 @@ class LINKXDataset(InMemoryDataset):
             data = self._process_facebook()
         elif self.name in ['genius', 'pokec']:
             data = self._process_mat()
-        elif self.name in ['twitch-gamer']:
+        elif self.name == 'deezer-europe':
+            data = self._process_deezer_europe()
+        elif self.name == 'twitch-gamer':
             data = self._process_gamer()
         elif self.name == 'wiki':
             data = self._process_wiki()

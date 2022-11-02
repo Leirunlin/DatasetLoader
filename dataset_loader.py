@@ -24,7 +24,7 @@ elif name in ['film', 'actor']:
     root += '/actor/'
     dataset = Actor(root=root)
 elif name in ['penn94', 'genius', 'wiki', 'pokec', 'arxiv-year',
-              'twitch-gamer', 'snap-patents', 'twitch-de']:
+              'twitch-gamer', 'snap-patents', 'twitch-de', 'deezer-europe']:
     dataset = LINKXDataset(root=root, name=name)
 
 # test
