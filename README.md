@@ -104,7 +104,11 @@ For example, cora after processing:
 * Directly download LINKX datasets and splits could fail. Please download raw files from [LINKX](https://github.com/CUAI/Non-Homophily-Large-Scale) and store in the given format.
 * Data splits are fixed following pyG except for wiki (fixed splits are not provided). For more flexible splits, please refer to [GPRGNN](https://github.com/jianhao2016/GPRGNN) and [BernNet](https://github.com/ivam-he/BernNet).
 
-## Update in 11/2/2022
+## Update in Feb.7th, 2023
+* Add feature transformation following GPRGNN.
+* Add GPR prepocess about Chameleon and Squirrel.
+
+## Update in Nov.2nd, 2022
 * Remove the requirement of renaming .mat files.
 * Add deezer-europe datasets.
 * Remove the requirement of renaming raw files in twitch-de dataset.
