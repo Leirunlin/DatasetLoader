@@ -104,6 +104,12 @@ For example, cora after processing:
 * Directly download LINKX datasets and splits could fail. Please download raw files from [LINKX](https://github.com/CUAI/Non-Homophily-Large-Scale) and store in the given format.
 * Data splits are fixed following pyG except for wiki (fixed splits are not provided). For more flexible splits, please refer to [GPRGNN](https://github.com/jianhao2016/GPRGNN) and [BernNet](https://github.com/ivam-he/BernNet).
 
+## Update in Apr.19th, 2023
+* Add hetero datasets
+* Update statistics and description. 
+* Full structure not updated yet, but similar to current folders.
+* Check /data/runlin/data for details.
+
 ## Update in Feb.22nd, 2023
 * Add supports for ogb datasets
 * Add dataset description, not done yet.
