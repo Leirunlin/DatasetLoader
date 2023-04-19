@@ -104,6 +104,12 @@ For example, cora after processing:
 * Directly download LINKX datasets and splits could fail. Please download raw files from [LINKX](https://github.com/CUAI/Non-Homophily-Large-Scale) and store in the given format.
 * Data splits are fixed following pyG except for wiki (fixed splits are not provided). For more flexible splits, please refer to [GPRGNN](https://github.com/jianhao2016/GPRGNN) and [BernNet](https://github.com/ivam-he/BernNet).
 
+## Update in Feb.22nd, 2023
+* Add supports for ogb datasets
+* Add dataset description, not done yet.
+* Fix to_undirect() for LINKX datasets.
+* Add dataset statistics.
+
 ## Update in Feb.7th, 2023
 * Add feature transformation following GPRGNN.
 * Add GPR prepocess about Chameleon and Squirrel.
